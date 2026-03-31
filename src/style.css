@@ -55,7 +55,12 @@ body {
   align-items: center;
 }
 
-
+.label {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.6rem;
+  color: hsl(200, 100%, 10%);
+}
 
 
 
