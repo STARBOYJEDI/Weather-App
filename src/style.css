@@ -35,4 +35,7 @@ body {
   height: 100px;
 }
 
-
+.header-current-temp {
+  font-size: 2rem;
+  margin-left: 1rem;
+}
