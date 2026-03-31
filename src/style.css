@@ -30,4 +30,9 @@ body {
   object-fit: contain;
 }
 
+.weather-icon[data-current-icon] {
+  width: 100px;
+  height: 100px;
+}
+
 
