@@ -24,6 +24,10 @@ body {
   border-right: 2px solid hsl(200, 100%, 10%);
 }
 
-
+.weather-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
 
 
