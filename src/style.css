@@ -100,6 +100,10 @@ body {
   background-color: hsl(200, 60%, 75%);
 }
 
+.hour-row:nth-child(2n) {
+  background-color: hsl(200, 60%, 80%);
+}
+
 
 
 
