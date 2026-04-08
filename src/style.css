@@ -84,7 +84,11 @@ body {
   padding: 0.25rem;
 }
 
-
+.day-card-day {
+  font-size: 0.75rem;
+  color: hsl(200, 100%, 20%);
+  margin-top: 0.5rem;
+}
 
 
 
