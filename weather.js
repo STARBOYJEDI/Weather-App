@@ -22,5 +22,33 @@ export function getWeather(lat, lon, timezone) {
     })
 }
 
+function parseCurrentWeather({ current_weather, daily }) {
+    const {
+        temperature: currentTemp,
+        windspeed: windspeed,
+        weathercode: iconCode,
+    } = current_weather
+    const {
+        temperature_2m_max: [maxTemp],
+        temperature_2m_min: [minTemp],
+        apparent_temperature_max: [maxFeelsLike],
+        apparent_temperature_min: [minFeelsLike],
+        precipitation_sum: [precip],
+    } = daily
+    return {
+        currentTTemp: Math.round(currentTemp),
+        highTemp: Math.round(maxTemp),
+        lowTemp: Math.round(minTemp),
+        highFeelsLike: Math.round(maxFeelsLike),
+        lowFeelsLike: Math.round(minFeelsLike),
+        windspeed: Math.round(windspeed),
+        precip: Math.round(precip * 100) / 100,
+        iconCode,
+    }
+}
+
+
+
+
 
 
