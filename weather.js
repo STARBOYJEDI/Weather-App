@@ -2,14 +2,16 @@ import axios from "axios"
 
 // https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&daily=weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,precipitation_sum&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m&timezone=Africa%2FCairo&timeformat=unixtime
 
-export function getWeather(lat, lon, timezone) {
-    return axios.get(
-        "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&daily=weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,precipitation_sum&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m&timezone=Africa%2FCairo&timeformat=unixtime", 
+return axios.get(
+        "https://api.open-meteo.com/v1/forecast", 
         { 
             params: {
                 latitude: lat,
                 longitude: lon,
                 timezone,
+                daily: "weather_code, temperature_2m_max...",
+                hourly: "temperature_2m, apparent_temperature...",
+                timeformat: "unixtime",
             },
         }
     )
@@ -19,8 +21,9 @@ export function getWeather(lat, lon, timezone) {
             daily: parseDailyWeather(data),
             hourly: parseHourlyWeather(data),
         }
-    })
-}
+    }
+)
+
 
 function parseCurrentWeather({ current_weather, daily }) {
     const {
@@ -36,7 +39,7 @@ function parseCurrentWeather({ current_weather, daily }) {
         precipitation_sum: [precip],
     } = daily
     return {
-        currentTTemp: Math.round(currentTemp),
+        currentTemp: Math.round(currentTemp),
         highTemp: Math.round(maxTemp),
         lowTemp: Math.round(minTemp),
         highFeelsLike: Math.round(maxFeelsLike),
@@ -65,8 +68,8 @@ function parseHourlyWeather({ hourly, current_weather }) {
                 iconCode: hourly.weathercode[index],
                 temp: Math.round(hourly.temperature_2m[index]),
                 feelsLike: Math.round(hourly.apparent_temperature[index]),
-                windSpeed: Math.round(hourly.windspeed_10m[index]),
-                precip: Math.round(hourly.precipitation[index] * 100) / 100,
+                windSpeed: Math.round(hourly.wind_speed_10m[index]),
+                precip: Math.round(hourly.precipitation_probability[index] * 100) / 100,
             }
         })
         .filter(({ timestamp }) => timestamp >= current_weather.time * 1000)
