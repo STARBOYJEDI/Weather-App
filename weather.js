@@ -2,30 +2,37 @@ import axios from "axios"
 
 // https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&daily=weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,precipitation_sum&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m&timezone=Africa%2FCairo&timeformat=unixtime
 
-return axios.get(
+export function getWeather(lat, lon, timezone) {
+    return axios.get(
         "https://api.open-meteo.com/v1/forecast", 
-        { 
-            params: {
-                latitude: lat,
-                longitude: lon,
-                timezone,
-                daily: "weather_code, temperature_2m_max...",
-                hourly: "temperature_2m, apparent_temperature...",
-                timeformat: "unixtime",
-            },
+            { 
+                params: {
+                    latitude: lat,
+                    longitude: lon,
+                    timezone,
+                    current_weather: "true",
+                    daily: "weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,precipitation_sum",
+                    hourly: "temperature_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m",
+                    timeformat: "unixtime",
+                },
+            }
+        )
+        .then(({ data }) => {
+            return {
+                current: parseCurrentWeather(data),
+                daily: parseDailyWeather(data),
+                hourly: parseHourlyWeather(data),
+            }
         }
     )
-    .then(({ data }) => {
-        return {
-            current: parseCurrentWeather(data),
-            daily: parseDailyWeather(data),
-            hourly: parseHourlyWeather(data),
-        }
-    }
-)
+}
 
 
 function parseCurrentWeather({ current_weather, daily }) {
+    if (!current_weather) {
+        console.error("No current_weather data!", arguments[0]);
+        return null;
+    }
     const {
         temperature: currentTemp,
         windspeed: windspeed,
@@ -54,7 +61,7 @@ function parseDailyWeather({ daily }) {
     return daily.time.map((time, index) => {
         return {
             timestamp: time * 1000,
-            iconCode: daily.weathercode[index],
+            iconCode: daily.weather_code[index],
             maxTemp: Math.round(daily.temperature_2m_max[index]),
         }
     })
@@ -65,7 +72,7 @@ function parseHourlyWeather({ hourly, current_weather }) {
         .map((time, index) => {
             return {
                 timestamp: time * 1000,
-                iconCode: hourly.weathercode[index],
+                iconCode: hourly.weather_code[index],
                 temp: Math.round(hourly.temperature_2m[index]),
                 feelsLike: Math.round(hourly.apparent_temperature[index]),
                 windSpeed: Math.round(hourly.wind_speed_10m[index]),
