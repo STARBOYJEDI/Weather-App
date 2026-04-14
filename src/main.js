@@ -10,12 +10,12 @@ getWeather(10, 10, Intl.DateTimeFormat().resolvedOptions().timeZone)
 
 function renderWeather( { current, daily, hourly }) {
     renderCurrentWeather(current)
-    renderDailyWeather(daily) 
-    renderHourlyWeather(hourly)
+    // renderDailyWeather(daily) 
+    // renderHourlyWeather(hourly)
     document.body.classList.remove("blurred")
 }
 
-function setValue(selector, value { parent = document } = {}) {
+function setValue(selector, value, { parent = document } = {}) {
     parent.querySelector(`[data-${selector}]`).textContent = value
 }
 
