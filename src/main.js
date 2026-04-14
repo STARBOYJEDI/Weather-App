@@ -15,6 +15,15 @@ function renderWeather( { current, daily, hourly }) {
     document.body.classList.remove("blurred")
 }
 
+function setValue(selector, value { parent = document } = {}) {
+    parent.querySelector(`[data-${selector}]`).textContent = value
+}
+
+
+function renderCurrentWeather(current) {
+    setValue("current-temp", current.currentTemp)
+}
+
 
 
 
