@@ -29,10 +29,6 @@ export function getWeather(lat, lon, timezone) {
 
 
 function parseCurrentWeather({ current_weather, daily }) {
-    if (!current_weather) {
-        console.error("No current_weather data!", arguments[0]);
-        return null;
-    }
     const {
         temperature: currentTemp,
         windspeed: windspeed,
